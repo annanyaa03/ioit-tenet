@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { FaUsers, FaUserShield, FaCreditCard, FaCheck, FaArrowLeft, FaArrowRight, FaWhatsapp, FaGamepad, FaTrophy } from 'react-icons/fa';
+import { FaUsers, FaUserShield, FaCreditCard, FaCheck, FaArrowLeft, FaArrowRight, FaTrophy, FaLock } from 'react-icons/fa';
 import { QRCodeSVG } from 'qrcode.react';
 import Link from 'next/link';
 import { esportsSchema, type FormInput, type MemberInput } from './schemas';
@@ -303,11 +303,12 @@ export default function EsportsRegisterPage() {
                             </div>
 
                             <button
-                                onClick={() => setShowForm(true)}
-                                className="w-full sm:w-auto bg-[#bb86fc] hover:bg-[#9e6afe] text-white rounded-lg py-2.5 px-5 text-sm font-medium transition-all duration-200 flex items-center justify-center mx-auto"
+                                aria-disabled={true}
+                                disabled
+                                className="w-full sm:w-auto bg-[#6b4fc9] text-white rounded-lg py-2.5 px-5 text-sm font-medium transition-all duration-200 flex items-center justify-center mx-auto opacity-80 cursor-not-allowed"
                             >
-                                <FaArrowRight className="mr-2" />
-                                Register Your Team
+                                <FaLock className="mr-2 h-4 w-4" />
+                                Registration Closed
                             </button>
                         </div>
                     </div>
