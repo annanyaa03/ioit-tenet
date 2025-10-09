@@ -28,6 +28,7 @@ export const env = createEnv({
     GOOGLE_SHEETS_CLIENT_EMAIL: z.string(),
     GOOGLE_SHEETS_ID: z.string(),
     GOOGLE_SHEETS_ID_DRONE: z.string(),
+    ATTENDANCE_SHEETS_ID: z.string(),
   },
 
   /**
@@ -55,6 +56,7 @@ export const env = createEnv({
     GOOGLE_SHEETS_CLIENT_EMAIL: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
     GOOGLE_SHEETS_ID: process.env.GOOGLE_SHEETS_ID,
     GOOGLE_SHEETS_ID_DRONE: process.env.GOOGLE_SHEETS_ID_DRONE,
+    ATTENDANCE_SHEETS_ID: process.env.ATTENDANCE_SHEETS_ID,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
