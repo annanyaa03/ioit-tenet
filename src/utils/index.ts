@@ -3,7 +3,7 @@ export function getEventStatus(targetDate?: Date): string {
   const eventDate = targetDate ? targetDate.getTime() : now.getTime();
   const timeDifference = eventDate - now.getTime();
 
-  if (now > new Date('2024-10-06')) {
+  if (now.getTime() > eventDate) {
     return 'Event Completed';
   }
 

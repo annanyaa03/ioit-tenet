@@ -1,7 +1,6 @@
 'use client';
 
 import { FiMapPin, FiPhone } from 'react-icons/fi';
-import Link from 'next/link';
 import type { EventType } from '@/types';
 import { useIsMobile } from '@/hooks/useismobile';
 
@@ -10,10 +9,6 @@ export const ScheduleItem = ({ data }: { data: EventType }) => {
 
   return (
     <div>
-      <Link
-        href={`/24/events/${data.id}`}
-        className='group mb-5 flex cursor-cell flex-col gap-3 pb-2 pt-3 text-slate-400 transition-all hover:text-white md:mb-0'
-      >
         <div className='mb-2 line-clamp-2 text-lg group-hover:text-white md:line-clamp-1 md:overflow-hidden md:truncate md:text-xl'>
           {data.title} <span className='hidden md:flex'>{data.time}</span>
         </div>
@@ -39,7 +34,6 @@ export const ScheduleItem = ({ data }: { data: EventType }) => {
             </div>
           )}
         </div>
-      </Link>
     </div>
   );
 };

@@ -23,7 +23,7 @@ export default async function HomePage() {
       <EventCountdown />
       <Tickets />
       <ScrollableEvents />
-      {/* <Schedule /> */}
+      <Schedule />
       <ZoomParallax />
       {/* <SearchEvents /> */}
       <Sponsors />

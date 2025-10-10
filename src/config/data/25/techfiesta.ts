@@ -41,7 +41,7 @@ export const data: TechfiestaData[] = [
     ],
     faqs: [
       { question: 'Who can participate?', answer: 'The competition is open to all college students and cybersecurity enthusiasts.' },
-      { question: 'What is the team size?', answer: 'Teams must consist of 2 to 4 members.' },
+      { question: 'What is the team size?', answer: 'Teams must consist of 1 to 4 members.' },
       { question: 'Are there any prerequisites?', answer: 'A basic understanding of cybersecurity concepts is recommended, but all skill levels are welcome.' }
     ],
     rules: [
