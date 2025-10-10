@@ -41,10 +41,12 @@ export const POST = async (request: NextRequest) => {
     const { eventName, id, timestamp, meal, goodies } = parsedData;
 
     if (!isValidSheetName(eventName)) {
-        return createErrorResponse('Invalid event name. Only alphanumeric characters, spaces, hyphens, and underscores are allowed.', 400);
+        return createErrorResponse(
+            'Invalid event name. Only alphanumeric characters, spaces, hyphens, and underscores are allowed.',
+            400
+        );
     }
 
-    let sheets;
     try {
         const auth = new google.auth.GoogleAuth({
             credentials: {
@@ -53,8 +55,10 @@ export const POST = async (request: NextRequest) => {
             },
             scopes: ['https://www.googleapis.com/auth/spreadsheets'],
         });
-        sheets = google.sheets({ version: 'v4', auth });
+
+        const sheets = google.sheets({ version: 'v4', auth });
         const spreadsheetId = env.ATTENDANCE_SHEETS_ID;
+
         await sheets.spreadsheets.get({ spreadsheetId });
 
         const headerRange = `'${eventName}'!1:1`;
@@ -62,9 +66,13 @@ export const POST = async (request: NextRequest) => {
             spreadsheetId,
             range: headerRange,
         });
+
         const headers = headerResponse.data.values?.[0];
         if (!headers || headers.length === 0) {
-            return createErrorResponse(`Sheet "${eventName}" is empty, does not exist, or headers could not be read.`, 404);
+            return createErrorResponse(
+                `Sheet "${eventName}" is empty, does not exist, or headers could not be read.`,
+                404
+            );
         }
 
         const headerMap: Record<string, number> = {};
@@ -80,7 +88,7 @@ export const POST = async (request: NextRequest) => {
         if (missingHeaders.length > 0) {
             return createErrorResponse(
                 `Missing required columns in sheet "${eventName}": ${missingHeaders.join(', ')}.`,
-                400,
+                400
             );
         }
 
@@ -90,15 +98,17 @@ export const POST = async (request: NextRequest) => {
             spreadsheetId,
             range: idRange,
         });
+
         const ids = idResponse.data.values?.flat() ?? [];
         const normalizedSearchId = id.toLowerCase().trim();
         const rowIndex = ids.findIndex(cellId =>
-            cellId && typeof cellId === 'string' && cellId.toLowerCase().trim() === normalizedSearchId,
+            cellId && typeof cellId === 'string' && cellId.toLowerCase().trim() === normalizedSearchId
         ) + 1;
+
         if (rowIndex === 0) {
             return createErrorResponse(
                 `ID "${id}" not found in the "${headers[headerMap.id ?? 0]}" column.`,
-                404,
+                404
             );
         }
 
@@ -116,6 +126,7 @@ export const POST = async (request: NextRequest) => {
                 values: [[goodies]],
             },
         ];
+
         await sheets.spreadsheets.values.batchUpdate({
             spreadsheetId,
             requestBody: {
@@ -124,24 +135,22 @@ export const POST = async (request: NextRequest) => {
             },
         });
 
-        return new Response(JSON.stringify({
-            status: 200,
-            message: `Attendance successfully marked for ID: ${id}`,
-            data: { id, eventName, timestamp, meal, goodies, rowUpdated: rowIndex },
-        }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
+        return new Response(
+            JSON.stringify({
+                status: 200,
+                message: `Attendance successfully marked for ID: ${id}`,
+                data: { id, eventName, timestamp, meal, goodies, rowUpdated: rowIndex },
+            }),
+            {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
     } catch (error: unknown) {
         console.error('Google Sheets API Error:', error);
-        
-        interface GoogleApiError {
-            code?: number;
-            message?: string;
-        }
-        
-        const apiError = error as GoogleApiError;
-        
+
+        const apiError = error as { code?: number; message?: string };
+
         if (apiError.code === 403) {
             return createErrorResponse('Access denied. Please check Google Sheets permissions.', 403);
         } else if (apiError.code === 404) {
@@ -151,6 +160,114 @@ export const POST = async (request: NextRequest) => {
         } else if (typeof apiError.message === 'string' && apiError.message.includes('Unable to parse range')) {
             return createErrorResponse(`Invalid sheet name "${eventName}".`, 400);
         }
+
+        return createErrorResponse('An internal server error occurred.', 500);
+    }
+};
+
+export const GET = async (request: NextRequest) => {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    const eventName = searchParams.get('eventName');
+
+    if (!id || !eventName) {
+        return createErrorResponse('Both id and eventName are required.', 400);
+    }
+
+    try {
+        const auth = new google.auth.GoogleAuth({
+            credentials: {
+                private_key: env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+                client_email: env.GOOGLE_SHEETS_CLIENT_EMAIL,
+            },
+            scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+        });
+
+        const sheets = google.sheets({ version: 'v4', auth });
+        const spreadsheetId = env.ATTENDANCE_SHEETS_ID;
+
+        const headerRange = `'${eventName}'!1:1`;
+        const headerResponse = await sheets.spreadsheets.values.get({
+            spreadsheetId,
+            range: headerRange,
+        });
+
+        const headers = headerResponse.data.values?.[0];
+        if (!headers || headers.length === 0) {
+            return createErrorResponse(
+                `Sheet "${eventName}" is empty, does not exist, or headers could not be read.`,
+                404
+            );
+        }
+
+        const headerMap: Record<string, number> = {};
+        headers.forEach((header, index) => {
+            if (header && typeof header === 'string') {
+                const normalizedHeader = header.toLowerCase().trim();
+                headerMap[normalizedHeader] = index;
+            }
+        });
+
+        const requiredHeaders = ['id', 'meal', 'goodies', 'timestamp'];
+        const missingHeaders = requiredHeaders.filter(h => headerMap[h] === undefined);
+        if (missingHeaders.length > 0) {
+            return createErrorResponse(
+                `Missing required columns in sheet "${eventName}": ${missingHeaders.join(', ')}.`,
+                400
+            );
+        }
+
+        const idColumnLetter = columnIndexToLetter(headerMap.id ?? 0);
+        const idRange = `'${eventName}'!${idColumnLetter}:${idColumnLetter}`;
+        const idResponse = await sheets.spreadsheets.values.get({
+            spreadsheetId,
+            range: idRange,
+        });
+
+        const ids = idResponse.data.values?.flat() ?? [];
+        const normalizedSearchId = id.toLowerCase().trim();
+        const rowIndex = ids.findIndex(cellId =>
+            cellId && typeof cellId === 'string' && cellId.toLowerCase().trim() === normalizedSearchId
+        ) + 1; 
+
+        if (rowIndex === 0) {
+            return createErrorResponse(`ID "${id}" not found.`, 404);
+        }
+
+        const timestampRange = `'${eventName}'!${columnIndexToLetter(headerMap.timestamp ?? 0)}${rowIndex}`;
+        const mealRange = `'${eventName}'!${columnIndexToLetter(headerMap.meal ?? 0)}${rowIndex}`;
+        const goodiesRange = `'${eventName}'!${columnIndexToLetter(headerMap.goodies ?? 0)}${rowIndex}`;
+
+        const [timestampResponse, mealResponse, goodiesResponse] = await Promise.all([
+            sheets.spreadsheets.values.get({ spreadsheetId, range: timestampRange }),
+            sheets.spreadsheets.values.get({ spreadsheetId, range: mealRange }),
+            sheets.spreadsheets.values.get({ spreadsheetId, range: goodiesRange }),
+        ]);
+
+        const timestamp = timestampResponse.data.values?.[0]?.[0] as string | null;
+        const meal = (mealResponse.data.values?.[0]?.[0] as string | undefined) ?? 'No';
+        const goodies = (goodiesResponse.data.values?.[0]?.[0] as string | undefined) ?? 'No';
+
+        return new Response(
+            JSON.stringify({
+                status: 200,
+                message: 'Attendance data fetched successfully.',
+                data: {
+                    id,
+                    eventName,
+                    attendanceMarked: !!timestamp,
+                    timestamp,
+                    meal,
+                    goodies,
+                },
+            }),
+            {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
+    } catch (error: unknown) {
+        console.error('Google Sheets API Error:', error);
         return createErrorResponse('An internal server error occurred.', 500);
     }
 };
