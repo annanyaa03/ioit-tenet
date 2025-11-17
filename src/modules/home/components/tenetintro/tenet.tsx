@@ -96,7 +96,7 @@ export const TENET: React.FC = () => {
           href={GALLERY_PAGE}
           className='date hidden text-2xl text-gray-200 md:block'
         >
-          Gallery&apos;24
+          Gallery&apos;25
         </Link>
       </div>
         </>

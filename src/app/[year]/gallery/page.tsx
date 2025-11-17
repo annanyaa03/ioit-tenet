@@ -6,7 +6,8 @@ import { CustomEase } from 'gsap/dist/CustomEase';
 import SplitType from 'split-type';
 import { type Pane } from 'tweakpane';
 
-import { eventsData, imageUrls } from '@/config/data/24/gallery';
+import { eventsData as eventsData24, imageUrls as imageUrls24 } from '@/config/data/24/gallery';
+import { gallery25Images } from '@/config/data/25/gallery';
 
 declare module 'gsap/dist/CustomEase' {
     interface CustomEase {
@@ -33,7 +34,17 @@ interface ActiveItem extends GalleryEvent {
     rect: DOMRect;
 }
 
-const Gallery: React.FC = () => {
+interface PageProps { params: { year: string } }
+
+const Gallery: React.FC<PageProps> = ({ params }) => {
+    const year = params?.year ?? '24';
+    const is25 = year === '25';
+    // Decide which image set to use
+    const imageUrls = is25 ? gallery25Images : imageUrls24;
+    // Provide titles; for 25 if we don't have curated names yet, generate placeholders
+    const eventsData = is25
+        ? Array.from({ length: imageUrls.length }, (_, i) => `TENET'25 • IMG ${String(i + 1).padStart(3, '0')}`)
+        : eventsData24;
     const [visibleItems, setVisibleItems] = useState<GalleryEvent[]>([]);
     const [activeItem, setActiveItem] = useState<ActiveItem | null>(null);
     const [isExpanded, setIsExpanded] = useState(false);

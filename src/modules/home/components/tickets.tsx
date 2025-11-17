@@ -120,16 +120,9 @@ export function Tickets() {
           className='mb-10 w-full text-center md:w-5/6 md:text-left'
           ref={headerRef}
         >
-          <h1 className='text-4xl font-bold sm:text-6xl'>TENET 2024</h1>
+          <h1 className='text-4xl font-bold sm:text-6xl'>TENET 2025</h1>
           <p className='mt-4 text-lg'>
-            TENET 2024 was an exhilarating event hosted by the IOIT ACM Student
-            Chapter, bringing together over 1,500 participants to celebrate
-            technology, innovation, and collaboration. Spanning 3 days, it
-            featured 25 diverse events, including tech conferences, workshops,
-            MUN, and e-sports tournaments. With 15+ expert speakers,
-            cutting-edge discussions, and a total prize pool exceeding ₹3 lakh,
-            TENET 2024 provided unparalleled opportunities for networking,
-            learning, and showcasing talent.
+            TENET 2025, organized by the AISSMS IOIT ACM Student Chapter, marked another milestone in our journey of fostering innovation and collaboration. This year, we proudly hosted the first edition of the TENET Hackathon and the third edition of IOIT MUN, alongside a range of exciting technical and non-technical events. Our focus for this edition was to create an engaging and memorable experience for all participants while nurturing a culture of building and problem-solving within our region. To support this vision, we introduced robotics competitions, workshops, and hands-on learning experiences that inspired students to innovate, explore, and collaborate. TENET 2025 truly embodied the spirit of creativity, teamwork, and technological growth.
           </p>
         </div>
       )}

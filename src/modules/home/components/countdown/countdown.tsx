@@ -33,23 +33,21 @@ export const ShiftingCountdown: React.FC<CountdownProps> = ({ endDate, className
   });
 
   useEffect(() => {
-    const calculateTimeLeft = () => {
+    const calculate = () => {
       const now = new Date();
-      const difference = endDate.getTime() - now.getTime();
+      const diff = endDate.getTime() - now.getTime();
 
-      if (difference > 0) {
-        const days = Math.floor(difference / DAY);
-        const hours = Math.floor((difference % DAY) / HOUR);
-        const minutes = Math.floor((difference % HOUR) / MINUTE);
-        const seconds = Math.floor((difference % MINUTE) / SECOND);
-        setTimeLeft({ days, hours, minutes, seconds });
-      } else {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      }
+      const displayMs = diff > 0 ? diff : now.getTime() - endDate.getTime();
+
+      const days = Math.floor(displayMs / DAY);
+      const hours = Math.floor((displayMs % DAY) / HOUR);
+      const minutes = Math.floor((displayMs % HOUR) / MINUTE);
+      const seconds = Math.floor((displayMs % MINUTE) / SECOND);
+      setTimeLeft({ days, hours, minutes, seconds });
     };
 
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
+    calculate();
+    const timer = setInterval(calculate, 1000);
 
     return () => clearInterval(timer);
   }, [endDate]);
@@ -59,7 +57,7 @@ export const ShiftingCountdown: React.FC<CountdownProps> = ({ endDate, className
       <div className="relative inline-block w-full text-center mb-4">
         {/* Main text layer */}
         <h1 className="text-center text-4xl md:text-9xl font-extrabold inline-block">
-          TENET&apos;25 BEGINS IN
+          {new Date().getTime() < endDate.getTime() ? "TENET'25 BEGINS IN" : "DAYS SINCE TENET'25"}
         </h1>
       </div>
 

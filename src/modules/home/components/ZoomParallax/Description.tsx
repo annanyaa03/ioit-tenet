@@ -7,19 +7,19 @@ import { useIsMobile } from '@/hooks/useismobile';
 const section1 = [
   'Top industry leaders',
   '15+ expert speakers',
-  '1500+ attendees',
+  '2000+ participants',
 ];
 
 const section2 = [
   '3 Lakh+ clubbed prizepool',
-  'recieved 1.4cr of funding',
+  'received 1.4cr of funding',
   'commitments in investing arena',
 ];
 
 const section3 = [
-  'Job & internship fair',
-  'Career opportunities',
-  'Meet top recruiters',
+  'Hackathon',
+  'AI • Web3 tracks',
+  '50k+ impressions',
 ];
 
 export default function Description() {

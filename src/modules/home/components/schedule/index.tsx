@@ -6,7 +6,6 @@ import { Separator } from '@/components/ui/separator';
 import { FollowCursor } from './cursor';
 import React, { useMemo, useState, useRef } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import Link from 'next/link';
 
 export const Schedule = () => {
   const [expanded, setExpanded] = useState<number | null>(null);

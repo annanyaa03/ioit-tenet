@@ -1,5 +1,4 @@
 import {
-  SearchEvents,
   MUN,
   EventCountdown,
   Intro,
