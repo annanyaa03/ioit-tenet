@@ -26,7 +26,7 @@ const splitText = (text: string, wordClass?: string) => {
 const lines = [
   'IOIT ACM STUDENT CHAPTER',
   'WELCOMES YOU TO',
-  'THE SECOND EDITION OF TENET',
+  'THE THIRD EDITION OF TENET',
 ];
 
 export const FallingCaps = () => {

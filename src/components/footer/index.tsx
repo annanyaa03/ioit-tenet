@@ -126,7 +126,7 @@ const PreFooter = () => {
       <Scrollytelling.Waypoint at={50} onCall={triggerConfetti} />
       <div className={s['left-content']}>
         <p>
-          IOIT ACM STUDENT CHAPTER WELCOMES YOU TO THE SECOND EDITION OF TENET
+          IOIT ACM STUDENT CHAPTER WELCOMES YOU TO THE THIRD EDITION OF TENET
         </p>
         <Link
           className={s['mobile-qr-link']}

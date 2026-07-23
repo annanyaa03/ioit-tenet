@@ -81,7 +81,7 @@ export const TENET: React.FC = () => {
       className='absolute top-0 hidden h-fit transform flex-col justify-center md:left-10 md:flex md:h-full'
     >
       <h2 className='headline hidden text-5xl font-extrabold text-white md:block'>
-        SECOND EDITION
+        THIRD EDITION
         <br />
         OF IOIT TENET
       </h2>
