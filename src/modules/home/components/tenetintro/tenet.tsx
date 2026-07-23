@@ -86,7 +86,7 @@ export const TENET: React.FC = () => {
         OF IOIT TENET
       </h2>
       <h2 className='date hidden text-lg text-gray-200 md:block'>
-        11th - 13th October 2025
+        COMING SOON
       </h2>
       <div className='link-item flex w-screen items-center justify-center text-center md:mt-5 md:w-full md:flex-col md:items-start md:justify-start md:text-right md:text-2xl'>
         <>

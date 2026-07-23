@@ -62,7 +62,7 @@ export const TITLETEXT: React.FC = () => {
       <h2 className='headline text-lg font-bold text-white'>
         SECOND EDITION OF IOIT TENET
       </h2>
-      <h2 className='date text-sm text-gray-200'>11th - 13th October 2025</h2>
+      <h2 className='date text-sm text-gray-200'>COMING SOON</h2>
     </div>
   );
 };
